@@ -4,8 +4,12 @@
  * Driver for the ST LPS22 pressure sensor
  */
 
-#ifndef _LPS22_H
-#define _LPS22_H
+#ifndef _LPS22
+#define _LPS22
+
+#include <Arduino.h>
+#include <Wire.h>
+
 
 /** Registers definition
  */
@@ -48,7 +52,7 @@
 #define LPS_MIN_PRESSURE 260    // hPa
 #define LPS_MAX_PRESSURE 1260   // hPa
 #define LPS_PRESSURE_SENSITIVITY 4096       // 4096 LSB = 1 hPa
-#define LPS_PRESSURE_RESOLUTION 0.0002441406   // 1 LSB = 1/4096 = 0.0002441406 hPa
+#define LPS_PRESSURE_RESOLUTION 0.00024414  // 1 LSB = 1/4096 = 0.0002441406 hPa
 #define LPS_TEMPERATURE_SENSITIVITY 100     // 100 LSB = °C
 #define LPS_TEMPERATURE_RESOLUTION  0.01    // 1 LSB = 1/100 = 0.01 °C
 #define LPS_SPI_CLOCK_FREQUENCY 1e6         // 1 Mhz
@@ -56,7 +60,7 @@
 /**
  * @brief
  * 
- * Output data rate bit configurations
+ * Allowed values to configure the Output data rate bits
 */
 typedef enum{
     LPS_ODR_ONE_SHOT,
@@ -69,5 +73,65 @@ typedef enum{
     LPS_ODR_200_HZ
 } lps_odr;
 
+/**
+ * @brief
+ * 
+ * Allowed values to configure the FIFO mode selection
+*/
+typedef enum{
+    LPS_FIFO_BYPASS,
+    LPS_FIFO_MODE,
+    LPS_FIFO_STREAM_MODE,
+    LPS_FIFO_STREAM_TO_FIFO,
+    LPS_FIFO_BYPASS_TO_STREAM,
+    LPS_FIFO_RESERVED,
+    LPS_FIFO_DYNAMIC_STREAM,
+    LPS_FIFO_BYPASS_TO_FIFO
+} lps_fifo;
+
+
+/**
+ * @brief
+ * 
+ * Class to store state and function to interact
+ * with the LPS22 Pressure & Temperature Sensor.
+*/
+class LPS22 {
+public:
+    LPS22(int8_t cs_pin);
+
+    float getPressure();           ///< absolute pressure in hPa
+    float getTemperature();        ///< temperature in Celsius
+    int32_t getPressureValue();    ///< raw absolute pressure
+    int16_t getTemperatureValue(); ///< raw temperature
+
+    void setDataRate(lps_odr data_rate); ///< configure ODR
+    void setFifoMode(lps_fifo fifo_mode); ///< configure FIFO
+    
+    uint8_t whoAmI(void);       ///< Get the ID of the sensor
+    void triggerOneShot(void);  ///< Trigger a single measurement
+    void swreset(void);         ///< Software reset
+    bool hasNewPressure(void);  ///< New measurement done
+    uint8_t getStatus(void);    ///< Get status register
+    
+    uint8_t readSingleRegister(uint8_t reg);
+    void readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs);
+
+    void writeSingleRegister(uint8_t reg, uint8_t value);
+    bool writeMultiRegister(uint8_t reg, uint32_t value, uint8_t numRegs);
+
+    bool readSingleBit(uint8_t reg, uint8_t position);
+    uint8_t readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits);
+
+    void writeSingleBit(uint8_t reg, uint8_t position, bool value);
+    void writeMultiBits(uint8_t reg, uint8_t position, uint8_t value, uint8_t numBits);
+
+private:
+
+    void enableSPI(void);
+    void disableSPI(void);
+    int8_t cs_pin;
+    bool isOneShot = false;
+};
 
 #endif
