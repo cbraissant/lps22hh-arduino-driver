@@ -98,13 +98,14 @@ typedef enum{
 */
 class LPS22 {
 public:
-    LPS22(int8_t cs_pin);
+    LPS22();
 
     float getPressure();           ///< absolute pressure in hPa
     float getTemperature();        ///< temperature in Celsius
     int32_t getPressureValue();    ///< raw absolute pressure
     int16_t getTemperatureValue(); ///< raw temperature
 
+    void setCsPin(int8_t cs_pin); ///< configure CS Pin
     void setDataRate(lps_odr data_rate); ///< configure ODR
     void setFifoMode(lps_fifo fifo_mode); ///< configure FIFO
     

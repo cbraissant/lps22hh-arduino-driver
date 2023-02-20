@@ -15,7 +15,15 @@
 /**
  * @brief Construct a new LPS22
 */
-LPS22::LPS22(int8_t cs_pin){
+LPS22::LPS22(){
+}
+
+
+/**
+ * @brief Initialise the output pin
+ * @param cs_pin Chip select pin
+*/
+void LPS22::setCsPin(int8_t cs_pin){
     this->cs_pin = cs_pin;
     pinMode(cs_pin, OUTPUT);
     disableSPI();
