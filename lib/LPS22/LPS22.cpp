@@ -259,7 +259,7 @@ uint8_t LPS22::readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits){
 void LPS22::writeSingleBit(uint8_t reg, uint8_t position, bool value){
   uint8_t data = readSingleRegister(reg);
   uint8_t mask = 1 << position;
-  if (data) {
+  if (value) {
     data |= mask;
   } else {
     data &= ~mask;
