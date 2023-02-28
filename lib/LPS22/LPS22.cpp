@@ -24,8 +24,8 @@ LPS22::LPS22(){
  * @param cs_pin Chip select pin
 */
 void LPS22::setCsPin(int8_t cs_pin){
-    this->cs_pin = cs_pin;
-    pinMode(cs_pin, OUTPUT);
+    this->_cs_pin = cs_pin;
+    pinMode(_cs_pin, OUTPUT);
     disableSPI();
 }
 
@@ -48,15 +48,7 @@ void LPS22::swreset(void) {
  * @param ODR the required Output Data Rate
 */
 void LPS22::setDataRate(lps_odr ODR) {
-  Serial.println("Debug - setDataRate - Before: ");
-  Serial.print("ODR: ");
-  Serial.println(ODR);
-  Serial.print("Control Register: ");
-  Serial.println(readSingleRegister(LPS_CTRL_REG1));
   writeMultiBits(LPS_CTRL_REG1, 4, ODR, 3);
-
-  Serial.print("Debug - setDataRate - After: ");
-  Serial.println(readSingleRegister(LPS_CTRL_REG1));
 }
 
 
@@ -156,7 +148,7 @@ float LPS22::getTemperature(void){
  * @brief Enable communication on the SPI bus
 */
 void LPS22::enableSPI(void){
-  digitalWrite(cs_pin, LOW);
+  digitalWrite(_cs_pin, LOW);
 }
 
 
@@ -164,7 +156,7 @@ void LPS22::enableSPI(void){
  * @brief Disable communication on the SPI bus 
 */
 void LPS22::disableSPI(void){
-  digitalWrite(cs_pin, HIGH);
+  digitalWrite(_cs_pin, HIGH);
 }
 
 
