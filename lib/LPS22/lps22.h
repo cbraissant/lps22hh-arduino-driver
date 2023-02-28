@@ -55,7 +55,7 @@
 #define LPS_PRESSURE_RESOLUTION 0.00024414  // 1 LSB = 1/4096 = 0.0002441406 hPa
 #define LPS_TEMPERATURE_SENSITIVITY 100     // 100 LSB = °C
 #define LPS_TEMPERATURE_RESOLUTION  0.01    // 1 LSB = 1/100 = 0.01 °C
-#define LPS_SPI_CLOCK_FREQUENCY 1e6         // 1 Mhz
+#define LPS_SPI_CLOCK_FREQUENCY 100000      // 100 kHz
 
 /**
  * @brief
@@ -128,11 +128,9 @@ public:
     void writeMultiBits(uint8_t reg, uint8_t position, uint8_t value, uint8_t numBits);
 
 private:
-
     void enableSPI(void);
     void disableSPI(void);
-    int8_t cs_pin;
-    bool isOneShot = false;
+    int8_t _cs_pin;
 };
 
 #endif
