@@ -37,8 +37,9 @@ void LPS22::setCsPin(int8_t cs_pin){
 */
 void LPS22::swreset(void) {
     writeSingleBit(LPS_CTRL_REG2, 2, 1);
-    while( readSingleBit(LPS_CTRL_REG2, 2) ==1  ){
-        delay(1);
+    delay(100);
+    if (readSingleBit(LPS_CTRL_REG2, 2) == 0  ){
+        this->_isWorking = true;
     };
 }
 
@@ -89,11 +90,11 @@ int32_t LPS22::getPressureValue(void){
 
   // To optain the pressure, concatenate the values of the buffer
   int32_t pressure = 0;
-  pressure = (int32_t)buffer[2];
+  pressure = buffer[2];
   pressure <<= 8;
-  pressure |= (int32_t)(buffer[1]);
+  pressure |= buffer[1];
   pressure <<= 8;
-  pressure |= (int32_t)(buffer[0]); 
+  pressure |= buffer[0]; 
   return pressure;
 }
 

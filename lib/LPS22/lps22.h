@@ -23,16 +23,23 @@
 #define LPS_CTRL_REG2 0x11      ///< Control register
 #define LPS_CTRL_REG3 0x12      ///< Control register (MSB)
 
+/* WARNING
+ * These registers have a different address
+ * depending on the chip used (HB, HH, DF, ...)
+ */
 #define LPS_FIFO_CTRL 0x13      ///< FIFO configuration register
 #define LPS_FIFO_WTM 0x14       ///< FIFO Threshold setting register
 #define LPS_REF_P_L 0x15        ///< Reference pressure register (LSB)
 #define LPS_REF_P_H 0x16        ///< Reference pressure register (MSB)
+
 #define LPS_RPDS_L 0x18         ///< Pressure offset register (LSB)
 #define LPS_RPDS_H 0x19         ///< Pressure offset register (MSB)
 
 #define LPS_INT_SOURCE 0x24     ///< Interrupt register
 #define LPS_FIFO_STATUS1 0x25   ///< FIFO status register
 #define LPS_FIFO_STATUS2 0x26   ///< FIFO status register
+/* END WARNING */
+
 #define LPS_STATUS 0x27         ///< Status register
 
 #define LPS_PRESSURE_OUT_XL 0x28    ///< Pressure output register (LSB)
@@ -126,6 +133,8 @@ public:
 
     void writeSingleBit(uint8_t reg, uint8_t position, bool value);
     void writeMultiBits(uint8_t reg, uint8_t position, uint8_t value, uint8_t numBits);
+
+    bool _isWorking = false;
 
 private:
     void enableSPI(void);
