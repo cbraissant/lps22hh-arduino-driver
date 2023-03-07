@@ -3,7 +3,7 @@
 #include <LPS22.h>
 #include <unity.h>
 
-#define CS_PIN 9
+#define CS_PIN 10
 LPS22 sensor;
 
 
@@ -31,20 +31,20 @@ void test_set_cs_pin(void)
                                                          
 void test_read_single_register(void)
 {
-  TEST_ASSERT_EQUAL(0xB1, sensor.readSingleRegister(LPS_WHO_AM_I));
+  TEST_ASSERT_EQUAL(0xB3, sensor.readSingleRegister(LPS_WHO_AM_I));
 }
 
 
 void test_read_single_bit(void)
 {
-  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,0));
-  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,1));
-  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,2));
-  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,3));
-  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,4));
-  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,5));
-  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,6));
   TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,7));
+  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,6));
+  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,5));
+  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,4));
+  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,3));
+  TEST_ASSERT_EQUAL(0, sensor.readSingleBit(LPS_WHO_AM_I,2));
+  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,1));
+  TEST_ASSERT_EQUAL(1, sensor.readSingleBit(LPS_WHO_AM_I,0));
 }
 
 
@@ -62,7 +62,7 @@ void test_read_default_registers(void)
   TEST_ASSERT_EQUAL(0x00, sensor.readSingleRegister(LPS_THS_P_L));
   TEST_ASSERT_EQUAL(0x00, sensor.readSingleRegister(LPS_THS_P_H));
   TEST_ASSERT_EQUAL(0x00, sensor.readSingleRegister(LPS_IF_CTRL));
-  TEST_ASSERT_EQUAL(0xB1, sensor.readSingleRegister(LPS_WHO_AM_I));
+  TEST_ASSERT_EQUAL(0xB3, sensor.readSingleRegister(LPS_WHO_AM_I));
   TEST_ASSERT_EQUAL(0x00, sensor.readSingleRegister(LPS_CTRL_REG1));
   TEST_ASSERT_EQUAL(0x10, sensor.readSingleRegister(LPS_CTRL_REG2));
   TEST_ASSERT_EQUAL(0x00, sensor.readSingleRegister(LPS_CTRL_REG3));
@@ -80,7 +80,7 @@ void test_read_multi_registers(void)
   uint8_t buffer[4];
   sensor.readMultiRegister(buffer, LPS_WHO_AM_I, 4);
   // based on the assumption that the registers have their default value
-  TEST_ASSERT_EQUAL(0xB1, buffer[0]); // WHO_AM_I
+  TEST_ASSERT_EQUAL(0xB3, buffer[0]); // WHO_AM_I
   TEST_ASSERT_EQUAL(0x00, buffer[1]); // CTRL_REG1
   TEST_ASSERT_EQUAL(0x10, buffer[2]); // CTRL_REG2
   TEST_ASSERT_EQUAL(0x00, buffer[3]); // CTRL_REG3
