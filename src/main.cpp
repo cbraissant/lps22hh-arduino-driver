@@ -2,7 +2,7 @@
 #include <SPI.h>
 #include <LPS22.h>
 
-#define DEBUG false
+#define DEBUG true
 
 #if DEBUG
 #define debug(x) Serial.print(x)
@@ -57,7 +57,7 @@ void setup() {
   debugln("- Outputs Initialized");
 
 
-  for(int i=0; i<nbr_sensors; i++){
+  for(int i=1; i<=nbr_sensors; i++){
     debug("- Sensor ");
     debug(i);
     debug(": ");
@@ -71,7 +71,7 @@ void setup() {
     if (sensors[i]._isWorking == false) {
       debugln(" - SENSOR NOT WORKING");
       continue;
-    }
+    };
 
     // The ODR is set to "one-shot" by default,
     // and need to be configure to get some readings
@@ -84,7 +84,7 @@ void setup() {
 
     debug(" - Who Am I: ");
     debugln(sensors[i].whoAmI());
-  }
+  };
   
   debugln();
   debugln("--- Setup finished ---");
