@@ -62,7 +62,7 @@
 #define LPS_PRESSURE_RESOLUTION 0.00024414  // 1 LSB = 1/4096 = 0.0002441406 hPa
 #define LPS_TEMPERATURE_SENSITIVITY 100     // 100 LSB = °C
 #define LPS_TEMPERATURE_RESOLUTION  0.01    // 1 LSB = 1/100 = 0.01 °C
-#define LPS_SPI_CLOCK_FREQUENCY 100000      // 100 kHz
+#define LPS_SPI_CLOCK_FREQUENCY 2000000      // 100 kHz
 
 /**
  * @brief
@@ -115,6 +115,7 @@ public:
     void setCsPin(int8_t cs_pin); ///< configure CS Pin
     void setDataRate(lps_odr data_rate); ///< configure ODR
     void setFifoMode(lps_fifo fifo_mode); ///< configure FIFO
+    void setIsWorking(void);
     
     uint8_t whoAmI(void);       ///< Get the ID of the sensor
     void triggerOneShot(void);  ///< Trigger a single measurement
@@ -126,13 +127,13 @@ public:
     void readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs);
 
     void writeSingleRegister(uint8_t reg, uint8_t value);
-    bool writeMultiRegister(uint8_t reg, uint32_t value, uint8_t numRegs);
+    bool writeMultiRegister(uint8_t reg, uint8_t numRegs, uint32_t value);
 
     bool readSingleBit(uint8_t reg, uint8_t position);
     uint8_t readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits);
 
     void writeSingleBit(uint8_t reg, uint8_t position, bool value);
-    void writeMultiBits(uint8_t reg, uint8_t position, uint8_t value, uint8_t numBits);
+    void writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value);
 
     bool _isWorking = false;
 

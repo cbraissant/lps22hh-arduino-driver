@@ -37,10 +37,6 @@ void LPS22::setCsPin(int8_t cs_pin){
 */
 void LPS22::swreset(void) {
     writeSingleBit(LPS_CTRL_REG2, 2, 1);
-    delay(100);
-    if (readSingleBit(LPS_CTRL_REG2, 2) == 0  ){
-        this->_isWorking = true;
-    };
 }
 
 
@@ -49,7 +45,7 @@ void LPS22::swreset(void) {
  * @param ODR the required Output Data Rate
 */
 void LPS22::setDataRate(lps_odr ODR) {
-  writeMultiBits(LPS_CTRL_REG1, 4, ODR, 3);
+  writeMultiBits(LPS_CTRL_REG1, 4, 3, ODR);
 }
 
 
@@ -60,6 +56,16 @@ void LPS22::setDataRate(lps_odr ODR) {
 uint8_t LPS22::whoAmI(void){
   return readSingleRegister(LPS_WHO_AM_I);
 }
+
+
+/**
+ * @brief Set the isWorking flag by checking the value of the chip ID
+*/
+void LPS22::setIsWorking(void){
+  int data = readSingleRegister(LPS_WHO_AM_I);
+  data == 179 ? _isWorking = true : _isWorking = false;
+}
+
 
 
 /**
@@ -277,7 +283,7 @@ void LPS22::writeSingleBit(uint8_t reg, uint8_t position, bool value){
  * @param value Value of the bits to write
  * @param numBits Number of bits to write
 */
-void LPS22::writeMultiBits(uint8_t reg, uint8_t position, uint8_t value, uint8_t numBits){
+void LPS22::writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value){
   uint8_t data = readSingleRegister(reg);
   uint8_t mask = (1 << numBits ) - 1;
   mask <<= position;
