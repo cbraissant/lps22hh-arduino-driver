@@ -26,7 +26,7 @@ LPS22::LPS22(){
 void LPS22::setCsPin(int8_t cs_pin){
     this->_cs_pin = cs_pin;
     pinMode(_cs_pin, OUTPUT);
-    disableSPI();
+    endTransaction();
 }
 
 
@@ -56,16 +56,6 @@ void LPS22::setDataRate(lps_odr ODR) {
 uint8_t LPS22::whoAmI(void){
   return readSingleRegister(LPS_WHO_AM_I);
 }
-
-
-/**
- * @brief Set the isWorking flag by checking the value of the chip ID
-*/
-void LPS22::setIsWorking(void){
-  int data = readSingleRegister(LPS_WHO_AM_I);
-  data == 179 ? _isWorking = true : _isWorking = false;
-}
-
 
 
 /**
@@ -154,7 +144,7 @@ float LPS22::getTemperature(void){
 /**
  * @brief Enable communication on the SPI bus
 */
-void LPS22::enableSPI(void){
+void LPS22::beginTransaction(void){
   digitalWrite(_cs_pin, LOW);
 }
 
@@ -162,7 +152,7 @@ void LPS22::enableSPI(void){
 /**
  * @brief Disable communication on the SPI bus 
 */
-void LPS22::disableSPI(void){
+void LPS22::endTransaction(void){
   digitalWrite(_cs_pin, HIGH);
 }
 
@@ -183,10 +173,10 @@ void LPS22::disableSPI(void){
  * @return Value of the register
 */
 uint8_t LPS22::readSingleRegister(uint8_t reg){
-  enableSPI();
+  beginTransaction();
   SPI.transfer(reg | 0x80);
   uint8_t data = SPI.transfer(0x00);
-  disableSPI();
+  endTransaction();
   return data;
 }
 
@@ -198,12 +188,12 @@ uint8_t LPS22::readSingleRegister(uint8_t reg){
  * @return Value of the registers
 */
 void LPS22::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
-  enableSPI();
+  beginTransaction();
   SPI.transfer(reg | 0x80);
   for (uint8_t i=0; i<numRegs; i++){
     buffer[i] = SPI.transfer(0x00);
   }
-  disableSPI();
+  endTransaction();
 }
 
 
@@ -213,10 +203,10 @@ void LPS22::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
  * @param value value to write to the register
 */
 void LPS22::writeSingleRegister(uint8_t reg, uint8_t value){
-  enableSPI();
+  beginTransaction();
   SPI.transfer(reg);
   SPI.transfer(value);
-  disableSPI();
+  endTransaction();
 }
 
 /**

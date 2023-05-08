@@ -115,7 +115,6 @@ public:
     void setCsPin(int8_t cs_pin); ///< configure CS Pin
     void setDataRate(lps_odr data_rate); ///< configure ODR
     void setFifoMode(lps_fifo fifo_mode); ///< configure FIFO
-    void setIsWorking(void);
     
     uint8_t whoAmI(void);       ///< Get the ID of the sensor
     void triggerOneShot(void);  ///< Trigger a single measurement
@@ -135,12 +134,11 @@ public:
     void writeSingleBit(uint8_t reg, uint8_t position, bool value);
     void writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value);
 
-    bool _isWorking = false;
-
 private:
-    void enableSPI(void);
-    void disableSPI(void);
+    void beginTransaction(void);
+    void endTransaction(void);
     int8_t _cs_pin;
+    bool _isWorking = false;
 };
 
 #endif
