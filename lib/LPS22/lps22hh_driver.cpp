@@ -20,15 +20,15 @@ LPS22::LPS22(){
 /**
  * @brief Initialize the LPS22
 */
-void LPS22::init(SPIClass *theSpi, int8_t cs_pin){
+void LPS22::init(SPIClass *theSpi, int8_t csPin){
   setSpi(theSpi);
-  setCsPin(cs_pin);
+  setCsPin(csPin);
 }
 
 
 /**
  * @brief Attribute the chip select pin
- * @param cs_pin Chip select pin
+ * @param csPin Chip select pin
 */
 void LPS22::setSpi(SPIClass *theSpi){
     this->_spi = theSpi;
@@ -37,11 +37,11 @@ void LPS22::setSpi(SPIClass *theSpi){
 
 /**
  * @brief Attribute the chip select pin
- * @param cs_pin Chip select pin
+ * @param csPin Chip select pin
 */
-void LPS22::setCsPin(int8_t cs_pin){
-    this->_cs_pin = cs_pin;
-    pinMode(_cs_pin, OUTPUT);
+void LPS22::setCsPin(int8_t csPin){
+    this->_csPin = csPin;
+    pinMode(_csPin, OUTPUT);
     endTransaction();
 }
 
@@ -150,7 +150,7 @@ float LPS22::getTemperature(void){
  * @brief Enable communication on the SPI bus
 */
 void LPS22::beginTransaction(void){
-  digitalWrite(_cs_pin, LOW);
+  digitalWrite(_csPin, LOW);
 }
 
 
@@ -158,7 +158,7 @@ void LPS22::beginTransaction(void){
  * @brief Disable communication on the SPI bus 
 */
 void LPS22::endTransaction(void){
-  digitalWrite(_cs_pin, HIGH);
+  digitalWrite(_csPin, HIGH);
 }
 
 
