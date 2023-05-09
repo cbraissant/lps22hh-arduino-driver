@@ -82,7 +82,6 @@ void LPS22HH_driver::triggerNewMeasurement(void){
 }
 
 
-
 /**
  * @brief Check if a pressure data is available
  * @return True if new data, False otherwise
