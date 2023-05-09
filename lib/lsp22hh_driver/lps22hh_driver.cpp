@@ -221,11 +221,18 @@ float LPS22HH_driver::getTemperature(void){
 
 /**
  * @brief Configure the pressure offset
- * @param offset Pressure offset
+ * @param offset Pressure offset in mmHg
  * @remark The offset is then multiplied by 256 and substracted
  * from the p_compensated(t)   
 */
-void LPS22HH_driver::setPressureOffset(uint16_t offset){
+void LPS22HH_driver::setPressureOffset(uint32_t offset){
+  // Internally, the value of the pressure offset register (RPDS)
+  // is multiplied by 256 and substracted from the p_compensated(t).
+  // For the convertion to work, the offset need to be transformed
+  // in raw pressure by being multiplied by 4096, then divided by 256.
+  // The final multiplication factor is then 16
+  int multiplicationFactor = 16;
+  offset *= multiplicationFactor;
   writeMultiRegister(LPS22HH_RPDS_L, 2, offset);
 }
 
