@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include <SPI.h>
-#include "LPS22.h"
+#include "lps22hh_driver.h"
 
 
 /**
