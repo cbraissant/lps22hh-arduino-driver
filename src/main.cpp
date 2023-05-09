@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include <SPI.h>
-#include <LPS22.h>
+#include <lps22hh_driver.h>
 
 #define BAUD 256000
 #define ARDUINO_CS_PIN 10
 
-LPS22 sensor;
+LPS22HH_driver sensor;
 SPIClass theSpi; 
 
 // Signal     Color       UNO   MEGA
@@ -20,7 +20,7 @@ void setup() {
   Serial.begin(BAUD);
 
   theSpi.begin();
-  theSpi.beginTransaction(SPISettings(LPS_SPI_CLOCK_FREQUENCY, MSBFIRST, SPI_MODE0));
+  theSpi.beginTransaction(SPISettings(LPS22HH_SPI_CLOCK_FREQUENCY, MSBFIRST, SPI_MODE0));
 
   Serial.println("- Output initialized");
 
@@ -30,11 +30,11 @@ void setup() {
 
   // The ODR is set to "one-shot" by default,
   // and need to be configure to get some readings
-  sensor.setDataRate(LPS_ODR_200_HZ);
+  sensor.setDataRate(LPS22HH_ODR_200_HZ);
 
   // Set the Block Data Update (BDU) to 1:
   // output registers not updated until MSB and LSB have been read
-  sensor.writeSingleBit(LPS_CTRL_REG1, 1, 1);  
+  sensor.writeSingleBit(LPS22HH_CTRL_REG1, 1, 1);  
 };
 
 float pressure;

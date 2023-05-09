@@ -13,14 +13,14 @@
 /**
  * @brief Construct a new LPS22
 */
-LPS22::LPS22(){
+LPS22HH_driver::LPS22HH_driver(){
 }
 
 
 /**
  * @brief Initialize the LPS22
 */
-void LPS22::init(SPIClass *theSpi, int8_t csPin){
+void LPS22HH_driver::init(SPIClass *theSpi, int8_t csPin){
   setSpi(theSpi);
   setCsPin(csPin);
 }
@@ -30,7 +30,7 @@ void LPS22::init(SPIClass *theSpi, int8_t csPin){
  * @brief Attribute the chip select pin
  * @param csPin Chip select pin
 */
-void LPS22::setSpi(SPIClass *theSpi){
+void LPS22HH_driver::setSpi(SPIClass *theSpi){
     this->_spi = theSpi;
 }
 
@@ -39,7 +39,7 @@ void LPS22::setSpi(SPIClass *theSpi){
  * @brief Attribute the chip select pin
  * @param csPin Chip select pin
 */
-void LPS22::setCsPin(int8_t csPin){
+void LPS22HH_driver::setCsPin(int8_t csPin){
     this->_csPin = csPin;
     pinMode(_csPin, OUTPUT);
     endTransaction();
@@ -51,8 +51,8 @@ void LPS22::setCsPin(int8_t csPin){
  * value if set to "1". Automatically return to "0" when the
  * reset is completed.
 */
-void LPS22::swreset(void) {
-    writeSingleBit(LPS_CTRL_REG2, 2, 1);
+void LPS22HH_driver::swreset(void) {
+    writeSingleBit(LPS22HH_CTRL_REG2, 2, 1);
 }
 
 
@@ -60,8 +60,8 @@ void LPS22::swreset(void) {
  * @brief Set the output data rate of the device
  * @param ODR the required Output Data Rate
 */
-void LPS22::setDataRate(lps_odr ODR) {
-  writeMultiBits(LPS_CTRL_REG1, 4, 3, ODR);
+void LPS22HH_driver::setDataRate(lps22hh_odr ODR) {
+  writeMultiBits(LPS22HH_CTRL_REG1, 4, 3, ODR);
 }
 
 
@@ -69,8 +69,8 @@ void LPS22::setDataRate(lps_odr ODR) {
  * @brief Read the internal ID of the chip
  * @return ID of the sensor
 */
-uint8_t LPS22::whoAmI(void){
-  return readSingleRegister(LPS_WHO_AM_I);
+uint8_t LPS22HH_driver::whoAmI(void){
+  return readSingleRegister(LPS22HH_WHO_AM_I);
 }
 
 
@@ -78,8 +78,8 @@ uint8_t LPS22::whoAmI(void){
  * @brief Check if a pressure data is available
  * @return True if new data, False otherwise
 */
-bool LPS22::hasNewPressure(void){
-  return readSingleBit(LPS_STATUS,0);
+bool LPS22HH_driver::hasNewPressure(void){
+  return readSingleBit(LPS22HH_STATUS,0);
 }
 
 
@@ -87,8 +87,8 @@ bool LPS22::hasNewPressure(void){
  * @brief Read the status register
  * @return Value of the register
 */
-uint8_t LPS22::getStatus(void){
-  return readSingleRegister(LPS_STATUS);
+uint8_t LPS22HH_driver::getStatus(void){
+  return readSingleRegister(LPS22HH_STATUS);
 }
 
 
@@ -96,9 +96,9 @@ uint8_t LPS22::getStatus(void){
  * @brief Retrieve the absolute pressure
  * @return Raw value of the absolute pressure 
 */
-int32_t LPS22::getPressureValue(void){
+int32_t LPS22HH_driver::getPressureValue(void){
   uint8_t buffer[3];
-  readMultiRegister(buffer, LPS_PRESSURE_OUT_XL, 3);
+  readMultiRegister(buffer, LPS22HH_PRESSURE_OUT_XL, 3);
 
   // To optain the pressure, concatenate the values of the buffer
   int32_t pressure = 0;
@@ -115,8 +115,8 @@ int32_t LPS22::getPressureValue(void){
  * @brief Retrieve the absolute pressure
  * @return Absolute pressure in hPa 
 */
-float LPS22::getPressure(void){
-  return getPressureValue()*LPS_PRESSURE_RESOLUTION;
+float LPS22HH_driver::getPressure(void){
+  return getPressureValue()*LPS22HH_PRESSURE_RESOLUTION;
 }
 
 
@@ -124,9 +124,9 @@ float LPS22::getPressure(void){
  * @brief Retrieve the temperature
  * @return Raw value of the temperature 
 */
-int16_t LPS22::getTemperatureValue(void){
+int16_t LPS22HH_driver::getTemperatureValue(void){
   uint8_t buffer[2];
-  readMultiRegister(buffer, LPS_TEMP_OUT_L, 2);
+  readMultiRegister(buffer, LPS22HH_TEMP_OUT_L, 2);
 
   // To optain the temperature, concatenate the values of the buffer
   int16_t temperature = 0;
@@ -141,15 +141,15 @@ int16_t LPS22::getTemperatureValue(void){
  * @brief Retrieve the temperature
  * @return Temperature in Celsius 
 */
-float LPS22::getTemperature(void){
-  return getTemperatureValue()*LPS_TEMPERATURE_RESOLUTION;
+float LPS22HH_driver::getTemperature(void){
+  return getTemperatureValue()*LPS22HH_TEMPERATURE_RESOLUTION;
 }
   
 
 /**
  * @brief Enable communication on the SPI bus
 */
-void LPS22::beginTransaction(void){
+void LPS22HH_driver::beginTransaction(void){
   digitalWrite(_csPin, LOW);
 }
 
@@ -157,7 +157,7 @@ void LPS22::beginTransaction(void){
 /**
  * @brief Disable communication on the SPI bus 
 */
-void LPS22::endTransaction(void){
+void LPS22HH_driver::endTransaction(void){
   digitalWrite(_csPin, HIGH);
 }
 
@@ -167,7 +167,7 @@ void LPS22::endTransaction(void){
  * @param reg Address of the register to read
  * @return Value of the register
 */
-uint8_t LPS22::readSingleRegister(uint8_t reg){
+uint8_t LPS22HH_driver::readSingleRegister(uint8_t reg){
   beginTransaction();
   _spi->transfer(reg | 0x80);
   uint8_t data = _spi->transfer(0x00);
@@ -182,7 +182,7 @@ uint8_t LPS22::readSingleRegister(uint8_t reg){
  * @param numRegs Number of register to read
  * @return Value of the registers
 */
-void LPS22::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
+void LPS22HH_driver::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
   beginTransaction();
   _spi->transfer(reg | 0x80);
   for (uint8_t i=0; i<numRegs; i++){
@@ -197,7 +197,7 @@ void LPS22::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
  * @param reg Address of the register to write
  * @param value value to write to the register
 */
-void LPS22::writeSingleRegister(uint8_t reg, uint8_t value){
+void LPS22HH_driver::writeSingleRegister(uint8_t reg, uint8_t value){
   beginTransaction();
   _spi->transfer(reg);
   _spi->transfer(value);
@@ -211,7 +211,7 @@ void LPS22::writeSingleRegister(uint8_t reg, uint8_t value){
  * @param position Position of the bit to read (0 = LSB)
  * @return Value of the read register
 */
-bool LPS22::readSingleBit(uint8_t reg, uint8_t position){
+bool LPS22HH_driver::readSingleBit(uint8_t reg, uint8_t position){
   uint8_t data = readSingleRegister(reg);
   return (data & (1<<position)) != 0;
 }
@@ -223,7 +223,7 @@ bool LPS22::readSingleBit(uint8_t reg, uint8_t position){
  * @param position Position of the bit to read (0 = LSB)
  * @param numBits Number of bits to read
 */
-uint8_t LPS22::readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits){
+uint8_t LPS22HH_driver::readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits){
   uint8_t data = readSingleRegister(reg);
   uint8_t mask = (1<<numBits) - 1;
   data >>= position;
@@ -238,7 +238,7 @@ uint8_t LPS22::readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits){
  * @param position Position of the bit to write (0 = LSB)
  * @param value Value of the bit to write
 */
-void LPS22::writeSingleBit(uint8_t reg, uint8_t position, bool value){
+void LPS22HH_driver::writeSingleBit(uint8_t reg, uint8_t position, bool value){
   uint8_t data = readSingleRegister(reg);
   uint8_t mask = 1 << position;
   if (value) {
@@ -257,7 +257,7 @@ void LPS22::writeSingleBit(uint8_t reg, uint8_t position, bool value){
  * @param value Value of the bits to write
  * @param numBits Number of bits to write
 */
-void LPS22::writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value){
+void LPS22HH_driver::writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value){
   uint8_t data = readSingleRegister(reg);
   uint8_t mask = (1 << numBits ) - 1;
   mask <<= position;
