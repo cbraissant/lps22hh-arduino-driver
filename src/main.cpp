@@ -28,6 +28,9 @@ void setup() {
 
   sensor.reset();
 
+  // The offset pressure (RPDS) is non-volatile and need to be manually reset.
+  sensor.setPressureOffset(0);
+
   // The ODR is set to "one-shot" by default,
   // and need to be configure to get some readings
   sensor.setDataRate(LPS22HH_ODR_200_HZ);
