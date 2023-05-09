@@ -113,9 +113,9 @@ public:
     void setDataRate(lps22hh_odr data_rate); ///< configure ODR
     void setFifoMode(lps22hh_fifo fifo_mode); ///< configure FIFO
     
-    uint8_t whoAmI(void);       ///< Get the ID of the sensor
+    uint8_t getDeviceId(void);       ///< Get the ID of the sensor
     void triggerOneShot(void);  ///< Trigger a single measurement
-    void swreset(void);         ///< Software reset
+    void reset(void);         ///< Software reset
     bool hasNewPressure(void);  ///< New measurement done
     uint8_t getStatus(void);    ///< Get status register
     

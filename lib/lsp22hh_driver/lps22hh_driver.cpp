@@ -51,7 +51,7 @@ void LPS22HH_driver::setCsPin(int8_t csPin){
  * value if set to "1". Automatically return to "0" when the
  * reset is completed.
 */
-void LPS22HH_driver::swreset(void) {
+void LPS22HH_driver::reset(void) {
     writeSingleBit(LPS22HH_CTRL_REG2, 2, 1);
 }
 
@@ -69,9 +69,18 @@ void LPS22HH_driver::setDataRate(lps22hh_odr ODR) {
  * @brief Read the internal ID of the chip
  * @return ID of the sensor
 */
-uint8_t LPS22HH_driver::whoAmI(void){
+uint8_t LPS22HH_driver::getDeviceId(void){
   return readSingleRegister(LPS22HH_WHO_AM_I);
 }
+
+
+/**
+ * @brief Trigger a new measurement when in standby
+*/
+void LPS22HH_driver::triggerNewMeasurement(void){
+  writeSingleBit(LPS22HH_CTRL_REG2, 0, 1);
+}
+
 
 
 /**

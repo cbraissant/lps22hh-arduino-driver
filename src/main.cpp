@@ -26,7 +26,7 @@ void setup() {
 
   sensor.init(&theSpi, ARDUINO_CS_PIN);
 
-  sensor.swreset();
+  sensor.reset();
 
   // The ODR is set to "one-shot" by default,
   // and need to be configure to get some readings
