@@ -65,6 +65,11 @@ void LPS22HH_driver::setDataRate(lps22hh_odr ODR) {
 }
 
 
+void LPS22HH_driver::setBlockDataUpdate(lps22hh_bdu bdu_mode){
+   writeSingleBit(LPS22HH_CTRL_REG1, 1, bdu_mode);
+}
+
+
 /**
  * @brief Read the internal ID of the chip
  * @return ID of the sensor
@@ -79,6 +84,15 @@ uint8_t LPS22HH_driver::getDeviceId(void){
 */
 void LPS22HH_driver::triggerNewMeasurement(void){
   writeSingleBit(LPS22HH_CTRL_REG2, 0, 1);
+}
+
+
+/**
+ * @brief Set the data rate to ONE_SHOT which put
+ *        the device in standby mode
+*/
+void LPS22HH_driver::powerDown(void){
+  setDataRate(LPS22HH_ODR_ONE_SHOT);
 }
 
 

@@ -34,7 +34,7 @@ void setup() {
 
   // Set the Block Data Update (BDU) to 1:
   // output registers not updated until MSB and LSB have been read
-  sensor.writeSingleBit(LPS22HH_CTRL_REG1, 1, 1);  
+  sensor.setBlockDataUpdate(LPS22HH_BDU_SYNCHRONOUS_UPDATE);  
 };
 
 float pressure;

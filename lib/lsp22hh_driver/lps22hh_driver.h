@@ -59,9 +59,9 @@
 #define LPS22HH_TEMPERATURE_RESOLUTION  0.01    // 1 LSB = 1/100 = 0.01 °C
 #define LPS22HH_SPI_CLOCK_FREQUENCY 2000000      // 100 kHz
 
+
 /**
  * @brief
- * 
  * Allowed values to configure the Output data rate bits
 */
 typedef enum{
@@ -75,9 +75,9 @@ typedef enum{
     LPS22HH_ODR_200_HZ
 } lps22hh_odr;
 
+
 /**
  * @brief
- * 
  * Allowed values to configure the FIFO mode selection
 */
 typedef enum{
@@ -90,6 +90,16 @@ typedef enum{
     LPS22HH_FIFO_DYNAMIC_STREAM,
     LPS22HH_FIFO_BYPASS_TO_FIFO
 } lps22hh_fifo;
+
+
+/**
+ * @brief
+ * Allowed values to configure the Block Data Update
+*/
+typedef enum{
+    LPS22HH_BDU_CONTINUOUS_UPDATE,
+    LPS22HH_BDU_SYNCHRONOUS_UPDATE
+} lps22hh_bdu;
 
 
 /**
@@ -112,9 +122,11 @@ public:
     void setCsPin(int8_t csPin); ///< configure CS Pin
     void setDataRate(lps22hh_odr data_rate); ///< configure ODR
     void setFifoMode(lps22hh_fifo fifo_mode); ///< configure FIFO
-    
+    void setBlockDataUpdate(lps22hh_bdu bdu_mode); // TODO
+
     uint8_t getDeviceId(void);       ///< Get the ID of the sensor
     void triggerNewMeasurement(void);  ///< Trigger a single measurement
+    void powerDown(void);     ///< Put the device in standby
     void reset(void);         ///< Software reset
     bool hasNewPressure(void);  ///< New measurement done
     uint8_t getStatus(void);    ///< Get status register
