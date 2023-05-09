@@ -131,6 +131,14 @@ public:
     bool hasNewPressure(void);  ///< New measurement done
     uint8_t getStatus(void);    ///< Get status register
     
+
+private:
+    int8_t _csPin;
+    SPIClass *_spi;
+
+    void beginTransaction(void);
+    void endTransaction(void);
+    
     uint8_t readSingleRegister(uint8_t reg);
     void readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs);
 
@@ -142,13 +150,6 @@ public:
 
     void writeSingleBit(uint8_t reg, uint8_t position, bool value);
     void writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value);
-
-private:
-    int8_t _csPin;
-    SPIClass *_spi;
-
-    void beginTransaction(void);
-    void endTransaction(void);
 };
 
 #endif
