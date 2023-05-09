@@ -57,17 +57,60 @@ void LPS22HH_driver::reset(void) {
 
 
 /**
- * @brief Set the output data rate of the device
- * @param ODR the required Output Data Rate
+ * @brief Set the output data rate (ODR) of the device
+ * @param dataRate the required Output Data Rate
 */
-void LPS22HH_driver::setDataRate(lps22hh_odr ODR) {
-  writeMultiBits(LPS22HH_CTRL_REG1, 4, 3, ODR);
+void LPS22HH_driver::setDataRate(lps22hh_odr dataRate) {
+  writeMultiBits(LPS22HH_CTRL_REG1, 4, 3, dataRate);
 }
 
 
-void LPS22HH_driver::setBlockDataUpdate(lps22hh_bdu bdu_mode){
-   writeSingleBit(LPS22HH_CTRL_REG1, 1, bdu_mode);
+lps22hh_odr LPS22HH_driver::getDataRate(void){
+  return static_cast<lps22hh_odr>(readMultiBits(LPS22HH_CTRL_REG1, 4, 3));
 }
+
+
+/**
+ * @brief Set the Block Data Update (BDU) mode
+ * @param bduMode the desired Block Data Update mode
+*/
+void LPS22HH_driver::setBlockDataUpdate(lps22hh_bdu bduMode){
+   writeSingleBit(LPS22HH_CTRL_REG1, 1, bduMode);
+}
+
+
+/**
+ * @brief Enable low-pass filter on pressure data when Continuous mode is used
+ * @param filterEnabled True to enable the filter
+*/
+void LPS22HH_driver::setLowPassFilter(bool filterEnabled){
+  writeSingleBit(LPS22HH_CTRL_REG1, 3, filterEnabled);
+}
+
+
+/**
+ * @brief Configure the bandwidth of the low pass filter
+ * @param filterBandwidth The desired bandwidth
+*/
+void LPS22HH_driver::setFilterBandwidth(lps22hh_lpfp filterBandwidth){
+  writeSingleBit(LPS22HH_CTRL_REG1, 2, filterBandwidth);
+}
+
+
+/**
+ * @brief Configure the bandwidth of the low pass filter
+ * @param filterBandwidth The desired bandwidth
+*/
+void LPS22HH_driver::setLowNoise(bool lowNoiseEnabled){
+  // Note: For proper behavior of the pressure sensor,
+  // the LOW_NOISE_EN bit must be changed only when the
+  // device is in power-down (AN5209 - 3.4)
+  lps22hh_odr ODR = getDataRate();
+  powerDown();
+  writeSingleBit(LPS22HH_CTRL_REG2, 1, lowNoiseEnabled);
+  setDataRate(ODR);
+}
+
 
 
 /**
@@ -88,8 +131,7 @@ void LPS22HH_driver::triggerNewMeasurement(void){
 
 
 /**
- * @brief Set the data rate to ONE_SHOT which put
- *        the device in standby mode
+ * @brief Set the data rate to ONE_SHOT which put the device in standby mode
 */
 void LPS22HH_driver::powerDown(void){
   setDataRate(LPS22HH_ODR_ONE_SHOT);

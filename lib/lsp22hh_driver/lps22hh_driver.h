@@ -104,6 +104,16 @@ typedef enum{
 
 /**
  * @brief
+ * Allowed values to configure the low pass filter
+*/
+typedef enum{
+    LPS22HH_LPFP_ODR_BY_9,
+    LPS22HH_LPFP_ODR_BY_20
+} lps22hh_lpfp;
+ 
+
+/**
+ * @brief
  * 
  * Class to store state and function to interact
  * with the LPS22 Pressure & Temperature Sensor.
@@ -120,9 +130,15 @@ public:
 
     void setSpi(SPIClass *theSpi);  ///< configure SPI
     void setCsPin(int8_t csPin); ///< configure CS Pin
-    void setDataRate(lps22hh_odr data_rate); ///< configure ODR
-    void setFifoMode(lps22hh_fifo fifo_mode); ///< configure FIFO
-    void setBlockDataUpdate(lps22hh_bdu bdu_mode); // TODO
+    void setDataRate(lps22hh_odr dataRate); ///< configure ODR
+    lps22hh_odr getDataRate(void); ///< retrieve the ODR
+    void setFifoMode(lps22hh_fifo fifoMode); ///< configure FIFO
+    void setBlockDataUpdate(lps22hh_bdu bduMode); ///< configure BDU
+
+    void setLowPassFilter(bool filterEnabled); ///< configure LP filter
+    void setFilterBandwidth(lps22hh_lpfp filterBandwidth); ///< configure LPFP
+
+    void setLowNoise(bool lowNoiseEnabled); ///< configure the Low Noise
 
     uint8_t getDeviceId(void);       ///< Get the ID of the sensor
     void triggerNewMeasurement(void);  ///< Trigger a single measurement
@@ -138,7 +154,7 @@ private:
 
     void beginTransaction(void);
     void endTransaction(void);
-    
+
     uint8_t readSingleRegister(uint8_t reg);
     void readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs);
 
