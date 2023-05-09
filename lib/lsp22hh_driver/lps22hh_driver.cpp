@@ -170,17 +170,7 @@ uint8_t LPS22HH_driver::getStatus(void){
  * @return Raw value of the absolute pressure 
 */
 int32_t LPS22HH_driver::getRawPressure(void){
-  uint8_t buffer[3];
-  readMultiRegister(buffer, LPS22HH_PRESSURE_OUT_XL, 3);
-
-  // To optain the pressure, concatenate the values of the buffer
-  int32_t pressure = 0;
-  pressure = buffer[2];
-  pressure <<= 8;
-  pressure |= buffer[1];
-  pressure <<= 8;
-  pressure |= buffer[0]; 
-  return pressure;
+  return readMultiRegister(LPS22HH_PRESSURE_OUT_XL, 3);
 }
 
 
@@ -198,15 +188,7 @@ float LPS22HH_driver::getPressure(void){
  * @return Raw value of the temperature 
 */
 int16_t LPS22HH_driver::getRawTemperature(void){
-  uint8_t buffer[2];
-  readMultiRegister(buffer, LPS22HH_TEMP_OUT_L, 2);
-
-  // To optain the temperature, concatenate the values of the buffer
-  int16_t temperature = 0;
-  temperature |= (int16_t)(buffer[1]);
-  temperature <<= 8;
-  temperature |= (int16_t)(buffer[0]); 
-  return temperature;
+  return readMultiRegister(LPS22HH_TEMP_OUT_L, 2);
 }
 
 
@@ -274,13 +256,16 @@ uint8_t LPS22HH_driver::readSingleRegister(uint8_t reg){
  * @param numRegs Number of register to read
  * @return Value of the registers
 */
-void LPS22HH_driver::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
+uint32_t LPS22HH_driver::readMultiRegister(uint8_t reg, uint8_t numRegs){
+  uint32_t value;
   beginTransaction();
   _spi->transfer(reg | 0x80);
-  for (uint8_t i=0; i<numRegs; i++){
-    buffer[i] = _spi->transfer(0x00);
+  for (int i=0; i<numRegs; i++){
+    uint8_t data = _spi->transfer(0x00);
+    value |= (uint32_t)data << (8*i);
   }
   endTransaction();
+  return value;
 }
 
 

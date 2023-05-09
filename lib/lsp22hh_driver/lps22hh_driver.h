@@ -139,7 +139,7 @@ public:
     void setFilterBandwidth(lps22hh_lpfp filterBandwidth);
 
     void setLowNoise(bool lowNoiseEnabled);
-    void setPressureOffset(uint16_t offset); 
+    void setPressureOffset(uint32_t offset); 
 
     uint8_t getDeviceId(void);
     void triggerNewMeasurement(void);
@@ -157,7 +157,7 @@ private:
     void endTransaction(void);
 
     uint8_t readSingleRegister(uint8_t reg);
-    void readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs);
+    uint32_t readMultiRegister(uint8_t reg, uint8_t numRegs);
 
     void writeSingleRegister(uint8_t reg, uint8_t value);
     void writeMultiRegister(uint8_t reg, uint8_t numRegs, uint32_t value);
