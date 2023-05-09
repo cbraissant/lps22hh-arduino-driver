@@ -125,8 +125,8 @@ public:
 
     float getPressure();           ///< absolute pressure in hPa
     float getTemperature();        ///< temperature in Celsius
-    int32_t getPressureValue();    ///< raw absolute pressure
-    int16_t getTemperatureValue(); ///< raw temperature
+    int32_t getRawPressure();    ///< raw absolute pressure
+    int16_t getRawTemperature(); ///< raw temperature
 
     void setSpi(SPIClass *theSpi);  ///< configure SPI
     void setCsPin(int8_t csPin); ///< configure CS Pin

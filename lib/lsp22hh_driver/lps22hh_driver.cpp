@@ -160,7 +160,7 @@ uint8_t LPS22HH_driver::getStatus(void){
  * @brief Retrieve the absolute pressure
  * @return Raw value of the absolute pressure 
 */
-int32_t LPS22HH_driver::getPressureValue(void){
+int32_t LPS22HH_driver::getRawPressure(void){
   uint8_t buffer[3];
   readMultiRegister(buffer, LPS22HH_PRESSURE_OUT_XL, 3);
 
@@ -180,7 +180,7 @@ int32_t LPS22HH_driver::getPressureValue(void){
  * @return Absolute pressure in hPa 
 */
 float LPS22HH_driver::getPressure(void){
-  return getPressureValue()*LPS22HH_PRESSURE_RESOLUTION;
+  return getRawPressure()*LPS22HH_PRESSURE_RESOLUTION;
 }
 
 
@@ -188,7 +188,7 @@ float LPS22HH_driver::getPressure(void){
  * @brief Retrieve the temperature
  * @return Raw value of the temperature 
 */
-int16_t LPS22HH_driver::getTemperatureValue(void){
+int16_t LPS22HH_driver::getRawTemperature(void){
   uint8_t buffer[2];
   readMultiRegister(buffer, LPS22HH_TEMP_OUT_L, 2);
 
@@ -206,7 +206,7 @@ int16_t LPS22HH_driver::getTemperatureValue(void){
  * @return Temperature in Celsius 
 */
 float LPS22HH_driver::getTemperature(void){
-  return getTemperatureValue()*LPS22HH_TEMPERATURE_RESOLUTION;
+  return getRawTemperature()*LPS22HH_TEMPERATURE_RESOLUTION;
 }
   
 
