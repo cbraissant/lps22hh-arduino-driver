@@ -71,6 +71,15 @@ lps22hh_odr LPS22HH_driver::getDataRate(void){
 
 
 /**
+ * @brief Set the FIFO mode of the device
+ * @param fifoMode the required FIFO mode
+*/
+void LPS22HH_driver::setFifoMode(lps22hh_fifo fifoMode) {
+  writeMultiBits(LPS22HH_FIFO_CTRL, 0, 2, fifoMode);
+}
+
+
+/**
  * @brief Set the Block Data Update (BDU) mode
  * @param bduMode the desired Block Data Update mode
 */
@@ -265,6 +274,23 @@ void LPS22HH_driver::writeSingleRegister(uint8_t reg, uint8_t value){
   beginTransaction();
   _spi->transfer(reg);
   _spi->transfer(value);
+  endTransaction();
+}
+
+
+/**
+ * @brief Write a value to multiple registers
+ * @param reg Address of the first register to write
+ * @param numRegs Number of register to write
+ * @param value value to write to the register
+*/
+void LPS22HH_driver::writeMultiRegister(uint8_t reg, uint8_t numRegs, uint32_t value){
+  beginTransaction();
+  _spi->transfer(reg);
+  for (uint8_t i=0; i<numRegs; i++){
+    _spi->transfer(value);
+    value = value >> 8;
+  }
   endTransaction();
 }
 

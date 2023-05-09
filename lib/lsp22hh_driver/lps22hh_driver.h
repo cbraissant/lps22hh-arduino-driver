@@ -146,7 +146,7 @@ public:
     void reset(void);         ///< Software reset
     bool hasNewPressure(void);  ///< New measurement done
     uint8_t getStatus(void);    ///< Get status register
-    
+
 
 private:
     int8_t _csPin;
@@ -159,7 +159,7 @@ private:
     void readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs);
 
     void writeSingleRegister(uint8_t reg, uint8_t value);
-    bool writeMultiRegister(uint8_t reg, uint8_t numRegs, uint32_t value);
+    void writeMultiRegister(uint8_t reg, uint8_t numRegs, uint32_t value);
 
     bool readSingleBit(uint8_t reg, uint8_t position);
     uint8_t readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits);
