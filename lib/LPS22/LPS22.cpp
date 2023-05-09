@@ -2,14 +2,6 @@
 #include <stdint.h>
 #include <SPI.h>
 #include "LPS22.h"
-/**
- *    ____                                      
- *   / ___|    ___   _ __    ___    ___    _ __ 
- *   \___ \   / _ \ | '_ \  / __|  / _ \  | '__|
- *    ___) | |  __/ | | | | \__ \ | (_) | | |   
- *   |____/   \___| |_| |_| |___/  \___/  |_|
- * 
-*/
 
 
 /**
@@ -128,18 +120,7 @@ int16_t LPS22::getTemperatureValue(void){
 float LPS22::getTemperature(void){
   return getTemperatureValue()*LPS_TEMPERATURE_RESOLUTION;
 }
-
-
-
-/**
- *    ____    ____    ___ 
- *   / ___|  |  _ \  |_ _|
- *   \___ \  | |_) |  | | 
- *    ___) | |  __/   | | 
- *   |____/  |_|     |___|
- * 
-*/     
-
+  
 
 /**
  * @brief Enable communication on the SPI bus
@@ -155,16 +136,6 @@ void LPS22::beginTransaction(void){
 void LPS22::endTransaction(void){
   digitalWrite(_cs_pin, HIGH);
 }
-
-
-/**
- *    ____                   _         _                 
- *   |  _ \    ___    __ _  (_)  ___  | |_    ___   _ __ 
- *   | |_) |  / _ \  / _` | | | / __| | __|  / _ \ | '__|
- *   |  _ <  |  __/ | (_| | | | \__ \ | |_  |  __/ | |   
- *   |_| \_\  \___|  \__, | |_| |___/  \__|  \___| |_|   
- *                   |___/
-*/
 
 
 /**
@@ -209,15 +180,6 @@ void LPS22::writeSingleRegister(uint8_t reg, uint8_t value){
   endTransaction();
 }
 
-/**
- *    ____    _   _         
- *   | __ )  (_) | |_   ___ 
- *   |  _ \  | | | __| / __|
- *   | |_) | | | | |_  \__ \
- *   |____/  |_|  \__| |___/
- * 
-*/
-
 
 /**
  * @brief Read the value of a single bit of a register
@@ -243,7 +205,6 @@ uint8_t LPS22::readMultiBits(uint8_t reg, uint8_t position, uint8_t numBits){
   data >>= position;
   data &= mask;
   return (data);
-  // return ( (data >> position) & ((1<<numBits) - 1)))
 }
 
 
@@ -261,7 +222,6 @@ void LPS22::writeSingleBit(uint8_t reg, uint8_t position, bool value){
   } else {
     data &= ~mask;
   };
-  // data = data ? (data | mask) : (data & ~mask)
   writeSingleRegister(reg, data);
 }
 
