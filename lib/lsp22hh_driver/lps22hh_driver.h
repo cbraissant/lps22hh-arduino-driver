@@ -123,29 +123,30 @@ public:
     LPS22HH_driver();
     void init(SPIClass *theSpi, int8_t csPin);
 
-    float getPressure();           ///< absolute pressure in hPa
-    float getTemperature();        ///< temperature in Celsius
-    int32_t getRawPressure();    ///< raw absolute pressure
-    int16_t getRawTemperature(); ///< raw temperature
+    float getPressure();
+    float getTemperature();
+    int32_t getRawPressure();
+    int16_t getRawTemperature();
 
-    void setSpi(SPIClass *theSpi);  ///< configure SPI
-    void setCsPin(int8_t csPin); ///< configure CS Pin
-    void setDataRate(lps22hh_odr dataRate); ///< configure ODR
-    lps22hh_odr getDataRate(void); ///< retrieve the ODR
-    void setFifoMode(lps22hh_fifo fifoMode); ///< configure FIFO
-    void setBlockDataUpdate(lps22hh_bdu bduMode); ///< configure BDU
+    void setSpi(SPIClass *theSpi);
+    void setCsPin(int8_t csPin);
+    void setDataRate(lps22hh_odr dataRate);
+    lps22hh_odr getDataRate(void);
+    void setFifoMode(lps22hh_fifo fifoMode);
+    void setBlockDataUpdate(lps22hh_bdu bduMode);
 
-    void setLowPassFilter(bool filterEnabled); ///< configure LP filter
-    void setFilterBandwidth(lps22hh_lpfp filterBandwidth); ///< configure LPFP
+    void setLowPassFilter(bool filterEnabled);
+    void setFilterBandwidth(lps22hh_lpfp filterBandwidth);
 
-    void setLowNoise(bool lowNoiseEnabled); ///< configure the Low Noise
+    void setLowNoise(bool lowNoiseEnabled);
+    void setPressureOffset(uint16_t offset); 
 
-    uint8_t getDeviceId(void);       ///< Get the ID of the sensor
-    void triggerNewMeasurement(void);  ///< Trigger a single measurement
-    void powerDown(void);     ///< Put the device in standby
-    void reset(void);         ///< Software reset
-    bool hasNewPressure(void);  ///< New measurement done
-    uint8_t getStatus(void);    ///< Get status register
+    uint8_t getDeviceId(void);
+    void triggerNewMeasurement(void);
+    void powerDown(void);
+    void reset(void);
+    bool hasNewPressure(void);
+    uint8_t getStatus(void);
 
 
 private:

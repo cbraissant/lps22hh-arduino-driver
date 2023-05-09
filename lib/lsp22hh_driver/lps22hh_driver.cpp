@@ -220,6 +220,18 @@ float LPS22HH_driver::getTemperature(void){
   
 
 /**
+ * @brief Configure the pressure offset
+ * @param offset Pressure offset
+ * @remark The offset is then multiplied by 256 and substracted
+ * from the p_compensated(t)   
+*/
+void LPS22HH_driver::setPressureOffset(uint16_t offset){
+  writeMultiRegister(LPS22HH_RPDS_L, 2, offset);
+}
+
+
+
+/**
  * @brief Enable communication on the SPI bus
 */
 void LPS22HH_driver::beginTransaction(void){
