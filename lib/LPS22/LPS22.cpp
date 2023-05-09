@@ -1,3 +1,9 @@
+/*!
+ * @file LPS22.h
+ *
+ * Driver for the ST LPS22 pressure sensor
+ */
+
 #include <Arduino.h>
 #include <stdint.h>
 #include <SPI.h>
@@ -12,7 +18,25 @@ LPS22::LPS22(){
 
 
 /**
- * @brief Initialise the output pin
+ * @brief Initialize the LPS22
+*/
+void LPS22::init(SPIClass *theSpi, int8_t cs_pin){
+  setSpi(theSpi);
+  setCsPin(cs_pin);
+}
+
+
+/**
+ * @brief Attribute the chip select pin
+ * @param cs_pin Chip select pin
+*/
+void LPS22::setSpi(SPIClass *theSpi){
+    this->_spi = theSpi;
+}
+
+
+/**
+ * @brief Attribute the chip select pin
  * @param cs_pin Chip select pin
 */
 void LPS22::setCsPin(int8_t cs_pin){
@@ -145,8 +169,8 @@ void LPS22::endTransaction(void){
 */
 uint8_t LPS22::readSingleRegister(uint8_t reg){
   beginTransaction();
-  SPI.transfer(reg | 0x80);
-  uint8_t data = SPI.transfer(0x00);
+  _spi->transfer(reg | 0x80);
+  uint8_t data = _spi->transfer(0x00);
   endTransaction();
   return data;
 }
@@ -160,9 +184,9 @@ uint8_t LPS22::readSingleRegister(uint8_t reg){
 */
 void LPS22::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
   beginTransaction();
-  SPI.transfer(reg | 0x80);
+  _spi->transfer(reg | 0x80);
   for (uint8_t i=0; i<numRegs; i++){
-    buffer[i] = SPI.transfer(0x00);
+    buffer[i] = _spi->transfer(0x00);
   }
   endTransaction();
 }
@@ -175,8 +199,8 @@ void LPS22::readMultiRegister(uint8_t *buffer, uint8_t reg, uint8_t numRegs){
 */
 void LPS22::writeSingleRegister(uint8_t reg, uint8_t value){
   beginTransaction();
-  SPI.transfer(reg);
-  SPI.transfer(value);
+  _spi->transfer(reg);
+  _spi->transfer(value);
   endTransaction();
 }
 

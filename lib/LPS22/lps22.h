@@ -106,12 +106,14 @@ typedef enum{
 class LPS22 {
 public:
     LPS22();
+    void init(SPIClass *theSpi, int8_t cs_pin);
 
     float getPressure();           ///< absolute pressure in hPa
     float getTemperature();        ///< temperature in Celsius
     int32_t getPressureValue();    ///< raw absolute pressure
     int16_t getTemperatureValue(); ///< raw temperature
 
+    void setSpi(SPIClass *theSpi);  ///< configure SPI
     void setCsPin(int8_t cs_pin); ///< configure CS Pin
     void setDataRate(lps_odr data_rate); ///< configure ODR
     void setFifoMode(lps_fifo fifo_mode); ///< configure FIFO
@@ -135,10 +137,11 @@ public:
     void writeMultiBits(uint8_t reg, uint8_t position, uint8_t numBits, uint8_t value);
 
 private:
+    int8_t _cs_pin;
+    SPIClass *_spi;
+
     void beginTransaction(void);
     void endTransaction(void);
-    int8_t _cs_pin;
-    bool _isWorking = false;
 };
 
 #endif

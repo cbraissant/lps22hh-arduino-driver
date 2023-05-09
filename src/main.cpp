@@ -6,6 +6,7 @@
 #define ARDUINO_CS_PIN 10
 
 LPS22 sensor;
+SPIClass theSpi; 
 
 // Signal     Color       UNO   MEGA
 // Vcc        brown    
@@ -18,12 +19,12 @@ LPS22 sensor;
 void setup() {
   Serial.begin(BAUD);
 
-  SPI.begin();
-  SPI.beginTransaction(SPISettings(LPS_SPI_CLOCK_FREQUENCY, MSBFIRST, SPI_MODE0));
+  theSpi.begin();
+  theSpi.beginTransaction(SPISettings(LPS_SPI_CLOCK_FREQUENCY, MSBFIRST, SPI_MODE0));
 
   Serial.println("- Output initialized");
 
-  sensor.setCsPin(ARDUINO_CS_PIN);
+  sensor.init(&theSpi, ARDUINO_CS_PIN);
 
   sensor.swreset();
 
